@@ -1,12 +1,14 @@
 use super::usage;
 use crate::tasks;
 
+const VERSION: &'static str = "0.1.0-α";
+
 pub fn setup_queue(queue: &mut Vec<String>, cli_args: Vec<String>) {
     for c in cli_args[1].chars() {
         match c {
             '-' => (),
             'h' => usage::print_usage(),
-            'v' => tasks::print_version(),
+            'v' => println!("PackMan Version: {}", VERSION),
 
             'S' => {
                 let s: String = ["S;;", cli_args[2].as_str()].concat();
