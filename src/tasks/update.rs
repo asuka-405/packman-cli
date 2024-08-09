@@ -1,3 +1,3 @@
 pub fn packages() {
-    println!("Updating packages...");
+    println!("Yet to implement - Updating packages functionality");
 }

@@ -1,7 +1,7 @@
+use super::tasks;
 use super::usage;
-use crate::tasks;
 
-const VERSION: &'static str = "0.1.0-α";
+const VERSION: &'static str = "0.1.0-α (pre-alpha)";
 
 pub fn setup_queue(queue: &mut Vec<String>, cli_args: Vec<String>) {
     for c in cli_args[1].chars() {

@@ -1,8 +1,10 @@
+mod queue;
 mod tasks;
 mod utils;
 
+use queue;
 use std::{self, env};
-use utils::{queue, usage};
+use utils::usage;
 
 fn main() {
     let cli_args: Vec<String> = env::args().collect();
