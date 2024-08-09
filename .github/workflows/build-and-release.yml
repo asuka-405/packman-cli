@@ -28,8 +28,11 @@ jobs:
       - name: Build packman
         run: cargo build --release
 
+      - name: Create archive directory
+        run: mkdir archive && cp -r src ./Cargo.toml ./Cargo.lock archive/
+
       - name: Archive source code
-        run: tar -czf source-code.tar.gz .
+        run: tar -czf source-code.tar.gz archive
 
       - name: Upload build artifacts
         uses: actions/upload-artifact@v3
