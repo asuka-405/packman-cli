@@ -2,7 +2,6 @@ mod queue;
 mod tasks;
 mod utils;
 
-use queue;
 use std::{self, env};
 use utils::usage;
 

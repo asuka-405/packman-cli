@@ -1,0 +1,82 @@
+name: Build and Release Packman
+
+on:
+  push:
+    branches:
+      - main
+  release:
+    types: [created]
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Install dependencies
+        run: apt-get update && apt-get install -y curl build-essential pkg-config libssl-dev
+
+      - name: Install Rust
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          target: x86_64-unknown-linux-gnu
+
+      - name: Build packman
+        run: cargo build --release
+
+      - name: Archive source code
+        run: tar -czf source-code.tar.gz .
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: cli-binary
+          path: target/release/packman
+
+      - name: Upload source code
+        uses: actions/upload-artifact@v3
+        with:
+          name: source-code
+          path: source-code.tar.gz
+
+  release:
+    name: Create GitHub Release
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Download build artifacts
+        uses: actions/download-artifact@v3
+        with:
+          name: cli-binary
+          path: ./packman
+
+      - name: Download source code
+        uses: actions/download-artifact@v3
+        with:
+          name: source-code
+          path: ./source-code.tar.gz
+
+      - name: Create release
+        uses: ncipollo/release-action@v1
+        with:
+          artifacts: ./packman,./source-code.tar.gz
+          token: ${{ secrets.GITHUB_TOKEN }}
+          tag: ${{ github.ref }}
+          name: ${{ github.ref }}
+          body: |
+            ## Release Notes
+            - check @ https://packman.ksuryansh.xyz
+
+      - name: Publish the release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: ./packman,./source-code.tar.gz
+          token: ${{ secrets.GITHUB_TOKEN }}
